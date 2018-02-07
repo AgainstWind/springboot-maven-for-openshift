@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @SpringBootApplication
 @Controller
 public class SpringbootMavenForOpenshiftApplication {
@@ -17,7 +20,14 @@ public class SpringbootMavenForOpenshiftApplication {
 
 	@RequestMapping(value = "/",method = RequestMethod.GET)
 	public @ResponseBody String index(){
-		return "hello openshift!";
+		InetAddress ia;
+		try {
+			ia = InetAddress.getLocalHost();
+			return "hello openshift! response from: "+ia.getHostName()+"\n"+ia.getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			return "hello openshift! response from:"+e.getMessage();
+		}
 	}
 
 }
